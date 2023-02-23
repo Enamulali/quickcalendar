@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 const Event = require("./models/event");
 const Calendar = require("./models/calendar");
-const { seed, clearData } = require("./seeds/seed");
+const { seed } = require("./seeds/seed");
 
 mongoose
   .connect("mongodb://localhost:27017/quickcalendar", {
@@ -13,7 +13,9 @@ mongoose
     console.log("Connected to database");
     console.log(`Mongoose connection state: ${mongoose.connection.readyState}`);
 
-    clearData().then(() => seed());
+    mongoose.connection.once("open", async () => {
+      await seed();
+    });
   })
   .catch((err) => {
     console.log(err);
