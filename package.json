@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "setup-dbs": "node db/seed.js",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
