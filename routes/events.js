@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const { Event } = require("../db");
 
 const eventsRouter = express.Router();
@@ -21,6 +22,24 @@ eventsRouter.post("/", async (req, res) => {
 
     const postedEvent = await Event.create(req.body);
     res.status(201).send(postedEvent);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+eventsRouter.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).send({ message: "event id is invalid" });
+    }
+    const event = await Event.findById(id);
+    if (!event) {
+      return res.status(404).json("event not found");
+    }
+
+    res.status(200).send(event);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
