@@ -5,7 +5,7 @@ const Calendar = require("./models/calendar");
 const { seed } = require("./seeds/seed");
 
 mongoose
-  .connect("mongodb://localhost:27017/quickcalendar", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

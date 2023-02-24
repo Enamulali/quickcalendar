@@ -1,5 +1,5 @@
+require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const { validateId } = require("./middleware/errors");
 const eventsRouter = require("./routes/events");
 
