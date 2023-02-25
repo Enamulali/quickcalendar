@@ -52,4 +52,29 @@ usersRouter.post("/", async (req, res) => {
   }
 });
 
+//Get all users
+usersRouter.get("/", async (req, res) => {
+  try {
+    const users = await User.find();
+
+    res.status(200).send(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//Get user by ID
+usersRouter.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    res.status(200).send(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
 module.exports = usersRouter;
