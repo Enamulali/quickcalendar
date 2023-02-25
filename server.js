@@ -3,6 +3,7 @@ const express = require("express");
 const {
   validateId,
   handleInternalServerError,
+  handleNotFound,
 } = require("./middleware/errors");
 const eventsRouter = require("./routes/events");
 const usersRouter = require("./routes/users");
@@ -12,16 +13,16 @@ const app = express();
 
 //Middleware
 app.use(express.json());
-app.use("/events/:id", validateId);
 
 //Routes
-app.use("/events", eventsRouter);
-app.use("/users", usersRouter);
+app.use("/events", validateId, eventsRouter);
+app.use("/users", validateId, usersRouter);
 
 // Authentication middleware
 app.use(authJwt);
 
 //Error handling middleware
+app.use(handleNotFound);
 app.use(handleInternalServerError);
 
 const port = 9090;
