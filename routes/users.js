@@ -31,7 +31,7 @@ usersRouter.post("/login", async (req, res, next) => {
 });
 
 //User registration
-usersRouter.post("/", async (req, res) => {
+usersRouter.post("/", async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
@@ -47,33 +47,30 @@ usersRouter.post("/", async (req, res) => {
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
     res.status(201).json({ user: newUser, token });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 });
 
 //Get all users
-usersRouter.get("/", async (req, res) => {
+usersRouter.get("/", async (req, res, next) => {
   try {
     const users = await User.find();
 
     res.status(200).send(users);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 });
 
 //Get user by ID
-usersRouter.get("/:id", async (req, res) => {
+usersRouter.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
 
     res.status(200).send(user);
   } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: "Internal server error" });
+    next(err);
   }
 });
 

@@ -4,17 +4,16 @@ const { Event } = require("../db");
 
 const eventsRouter = express.Router();
 
-eventsRouter.get("/", async (req, res) => {
+eventsRouter.get("/", async (req, res, next) => {
   try {
     const events = await Event.find();
     res.status(200).send(events);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 });
 
-eventsRouter.post("/", async (req, res) => {
+eventsRouter.post("/", async (req, res, next) => {
   try {
     if (!req.body.title || !req.body.start || !req.body.end) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -23,12 +22,11 @@ eventsRouter.post("/", async (req, res) => {
     const postedEvent = await Event.create(req.body);
     res.status(201).send(postedEvent);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 });
 
-eventsRouter.get("/:id", async (req, res) => {
+eventsRouter.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const event = await Event.findById(id);
@@ -37,12 +35,11 @@ eventsRouter.get("/:id", async (req, res) => {
 
     res.status(200).send(event);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 });
 
-eventsRouter.put("/:id", async (req, res) => {
+eventsRouter.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
@@ -51,19 +48,17 @@ eventsRouter.put("/:id", async (req, res) => {
 
     res.status(201).send(updatedEvent);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 });
 
-eventsRouter.delete("/:id", async (req, res) => {
+eventsRouter.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedEvent = await Event.findByIdAndDelete(id);
     res.status(204).send();
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 });
 

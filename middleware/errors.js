@@ -8,4 +8,9 @@ const validateId = (req, res, next) => {
   next();
 };
 
-module.exports = { validateId };
+const handleInternalServerError = (err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ message: "Internal server error" });
+};
+
+module.exports = { validateId, handleInternalServerError };
