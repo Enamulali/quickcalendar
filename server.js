@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const {
-  validateId,
   handleInternalServerError,
   handleNotFound,
 } = require("./middleware/errors");
@@ -25,5 +24,4 @@ app.use(authJwt);
 app.use(handleNotFound);
 app.use(handleInternalServerError);
 
-const port = 9090;
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+module.exports = app;

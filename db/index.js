@@ -1,3 +1,6 @@
+const ENV = process.env.NODE_ENV || "development";
+require("dotenv").config({ path: `${__dirname}/../.env.${ENV}` });
+
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const Event = require("./models/event");
