@@ -23,6 +23,21 @@ async function seed() {
     { name: "Mahamud", email: "mahamud@example.com", password: "password" },
   ];
 
+  const events = [
+    {
+      title: "Event 1",
+      description: "Description of Event 1",
+      start: new Date(),
+      end: new Date(),
+    },
+    {
+      title: "Event 2",
+      description: "Description of Event 2",
+      start: new Date(),
+      end: new Date(),
+    },
+  ];
+
   // Hash passwords for users
   const saltRounds = 10;
   const hashedUsers = await Promise.all(
@@ -47,7 +62,7 @@ async function seed() {
     ]);
     console.log(`Created ${createdEvents.length} events`);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }
 
