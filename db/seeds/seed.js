@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const Event = require("../models/event");
 
@@ -23,24 +23,18 @@ async function seed() {
     { name: "Mahamud", email: "mahamud@example.com", password: "password" },
   ];
 
-  const events = [
-    {
-      title: "Event 1",
-      description: "Description of Event 1",
-      start: new Date(),
-      end: new Date(),
-    },
-    {
-      title: "Event 2",
-      description: "Description of Event 2",
-      start: new Date(),
-      end: new Date(),
-    },
-  ];
+  // Hash passwords for users
+  const saltRounds = 10;
+  const hashedUsers = await Promise.all(
+    users.map(async (user) => {
+      const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+      return { ...user, password: hashedPassword };
+    })
+  );
 
   // Create users and events
   try {
-    const createdUsers = await User.create(users);
+    const createdUsers = await User.create(hashedUsers);
     console.log(`Created ${createdUsers.length} users`);
 
     const createdEvents = await Event.create([
