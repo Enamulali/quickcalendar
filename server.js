@@ -14,11 +14,12 @@ const app = express();
 app.use(express.json());
 
 //Routes
-app.use("/events", validateId, eventsRouter);
-app.use("/users", validateId, usersRouter);
+app.use("/auth", authRouter);
 
-// Authentication middleware
+// // Protected Routes
 app.use(authJwt);
+app.use("/users", usersRouter);
+app.use("/events", eventsRouter);
 
 //Error handling middleware
 app.use(handleNotFound);
