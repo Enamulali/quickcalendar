@@ -8,6 +8,14 @@ const validateId = (req, res, next) => {
   next();
 };
 
+const handleValidationError = (err, req, res, next) => {
+  if (err.name === "ValidationError") {
+    res.status(400).json({ message: err.message });
+  } else {
+    next(err);
+  }
+};
+
 const handleInternalServerError = (err, req, res, next) => {
   console.error(err);
   res.status(500).json({ message: "Internal server error" });
@@ -17,4 +25,17 @@ const handleNotFound = (req, res, next) => {
   res.status(404).json({ message: "Route not found" });
 };
 
-module.exports = { validateId, handleInternalServerError, handleNotFound };
+const handleGenericError = (err, req, res, next) => {
+  if (err.statusCode) {
+    return res.status(err.statusCode).json({ message: err.message });
+  }
+  next(err);
+};
+
+module.exports = {
+  validateId,
+  handleInternalServerError,
+  handleNotFound,
+  handleGenericError,
+  handleValidationError,
+};
