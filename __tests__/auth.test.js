@@ -8,7 +8,7 @@ beforeAll(async () => {
 });
 
 describe("POST /auth", () => {
-  test("should register a new user", async () => {
+  test("201 - should register a new user", async () => {
     const response = await request(app).post("/auth").send({
       name: "John Doe",
       email: "johndoe@example.com",
@@ -22,8 +22,7 @@ describe("POST /auth", () => {
     const user = await User.findOne({ email: "johndoe@example.com" });
     expect(user).not.toBeNull();
   });
-
-  test("should login an existing user", async () => {
+  test("200 - should login an existing user", async () => {
     const response = await request(app).post("/auth/login").send({
       email: "enamul@example.com",
       password: "password",
@@ -32,5 +31,36 @@ describe("POST /auth", () => {
     expect(response).not.toBeNull();
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("token");
+  });
+  test("401 - should respond with error for invalid email ", async () => {
+    const response = await request(app).post("/auth/login").send({
+      email: "invalid@email.com",
+      password: "password",
+    });
+
+    expect(response).not.toBeNull();
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Invalid email");
+  });
+  test("401 - should respond with error for invalid password ", async () => {
+    const response = await request(app).post("/auth/login").send({
+      email: "enamul@example.com",
+      password: "invalidpassword",
+    });
+
+    expect(response).not.toBeNull();
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Invalid password");
+  });
+  test("409 - should respond with error for user already registered ", async () => {
+    const response = await request(app).post("/auth").send({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "password",
+    });
+
+    expect(response).not.toBeNull();
+    expect(response.status).toBe(409);
+    expect(response.body.message).toBe("User already exists");
   });
 });
