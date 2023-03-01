@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest --watch",
     "setup-dbs": "node db/seeds/seed.js",
-    "start": "node listen.js",
-    "dev": "nodemon listen.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
