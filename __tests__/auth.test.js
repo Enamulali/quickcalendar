@@ -63,4 +63,13 @@ describe("POST /auth", () => {
     expect(response.status).toBe(409);
     expect(response.body.message).toBe("User already exists");
   });
+  test("200 - should update existing user", async () => {
+    const response = await request(app)
+      .put("/auth/63fba36816343238568d7532")
+      .send({
+        name: "Updated Name",
+      });
+
+    console.log(response.body);
+  });
 });
