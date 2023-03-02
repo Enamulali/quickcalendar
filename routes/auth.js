@@ -3,7 +3,7 @@ const createError = require("http-errors");
 const { User } = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { validateId } = require("../middleware/errors");
+const { validateId, handleValidationError } = require("../middleware/errors");
 
 const authRouter = express.Router();
 
@@ -29,7 +29,7 @@ authRouter.post("/login", async (req, res, next) => {
 });
 
 //User registration
-authRouter.post("/", async (req, res, next) => {
+authRouter.post("/", handleValidationError, async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
