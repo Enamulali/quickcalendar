@@ -3,10 +3,14 @@ const app = require("../server");
 const { seed } = require("../db/seeds/seed");
 const { User } = require("../db");
 const bcrypt = require("bcrypt");
-const { validateId } = require("../middleware/errors");
+const { mongoose } = require("mongoose");
 
 beforeAll(async () => {
   await seed();
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
 });
 
 describe("POST /auth", () => {
