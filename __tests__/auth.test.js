@@ -2,6 +2,8 @@ const request = require("supertest");
 const app = require("../server");
 const { seed } = require("../db/seeds/seed");
 const { User } = require("../db");
+const bcrypt = require("bcrypt");
+const { validateId } = require("../middleware/errors");
 
 beforeAll(async () => {
   await seed();
@@ -64,12 +66,79 @@ describe("POST /auth", () => {
     expect(response.body.message).toBe("User already exists");
   });
   test("200 - should update existing user", async () => {
-    const response = await request(app)
-      .put("/auth/63fba36816343238568d7532")
-      .send({
-        name: "Updated Name",
-      });
+    const newUser = {
+      name: "John Doe",
+      email: "john@example.com",
+      password: "password",
+    };
 
-    console.log(response.body);
+    const createUser = await request(app).post("/auth").send(newUser);
+    const { user: createdUser } = createUser.body;
+
+    const updatedUser = {
+      name: "New name",
+      email: "new@email.com",
+      password: "newpassword",
+    };
+    const response = await await request(app)
+      .put(`/auth/${createdUser._id}`)
+      .send(updatedUser);
+
+    expect(response.status).toBe(200);
+    expect(response.body.name).toBe(updatedUser.name);
+    expect(response.body.email).toBe(updatedUser.email);
+
+    const comparePasswords = await bcrypt.compare(
+      updatedUser.password,
+      response.body.password
+    );
+
+    expect(comparePasswords).toBe(true);
+  });
+  test("404 - should respond with error for user not found", async () => {
+    const updateUser = {
+      name: "John Doe",
+      email: "john@example.com",
+      password: "password",
+    };
+
+    const response = await await request(app)
+      .put(`/auth/invalid_user`)
+      .send(updateUser);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("User not found");
+  });
+  test("404 - should respond with error invalid ID", async () => {
+    const invalidMongoID = "invalid_id_format";
+    const updateUser = {
+      name: "John Doe",
+      email: "john@example.com",
+      password: "password",
+    };
+
+    const response = await request(app)
+      .put(`/auth/${invalidMongoID}`)
+      .send(updateUser);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("Invalid id");
+  });
+  test("400 - should respond with error bad request", async () => {
+    const newUser = {
+      name: "John Doe",
+      email: "john@example.com",
+      password: "password",
+    };
+
+    const createUser = await request(app).post("/auth").send(newUser);
+    const { user: createdUser } = createUser.body;
+
+    const response = await await request(app)
+      .put(`/auth/${createdUser._id}`)
+      .send({});
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("At least one user field is required");
   });
 });
