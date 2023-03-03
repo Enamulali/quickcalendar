@@ -20,13 +20,13 @@ app.use(express.json());
 app.use("/auth", authRouter);
 
 // Protected Routes
+app.use(handleNotFound);
 app.use(authJwt);
 app.use("/users", usersRouter);
 app.use("/events", eventsRouter);
 
 //Error handling middleware
 app.use(handleValidationError);
-app.use(handleNotFound);
 app.use(handleGenericError);
 app.use(handleInternalServerError);
 

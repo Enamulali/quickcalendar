@@ -1,13 +1,16 @@
+const request = require("supertest");
+const app = require("../server");
 const {
   validateId,
   handleValidationError,
   handleInternalServerError,
+  handleGenericError,
 } = require("../middleware/errors");
 const {
   Error: { ValidationError },
 } = require("mongoose");
 
-describe("Name of the group", () => {
+describe("Middleware /errors", () => {
   test("validateId should call next function when passed valid Id", async () => {
     const mockNext = jest.fn();
     const validMongoID = "60e27d8cbe3c3e3a7f9a276d"; // replace with a valid ObjectId
@@ -80,5 +83,37 @@ describe("Name of the group", () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       message: error.message,
     });
+  });
+  test("404 - handleNotFound should return error not found when route does not exist", async () => {
+    const response = await request(app).get(`/invalidroute`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("Route not found");
+  });
+  test("handleGenericError returns response with same status code and error message when passed an error with a status code", () => {
+    const statusCode = 400;
+    const errorMessage = "Bad request";
+    const err = new Error(errorMessage);
+    err.statusCode = statusCode;
+
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const mockNext = jest.fn();
+
+    handleGenericError(err, {}, mockResponse, mockNext);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(statusCode);
+    expect(mockResponse.json).toHaveBeenCalledWith({ message: errorMessage });
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+  test("handleGenericError should call next function with the error", () => {
+    const err = new Error("Test error");
+
+    const mockNext = jest.fn();
+    handleGenericError(err, null, null, mockNext);
+
+    expect(mockNext).toHaveBeenCalledWith(err);
   });
 });
