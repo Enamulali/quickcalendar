@@ -13,8 +13,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Connected to database");
-    console.log(`Mongoose connection state: ${mongoose.connection.readyState}`);
+    process.env.NOTE_ENV === "development" &&
+      console.log("Connected to database");
 
     mongoose.connection.once("open", async () => {
       await seed();

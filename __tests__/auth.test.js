@@ -113,7 +113,7 @@ describe("POST /auth", () => {
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("User not found");
   });
-  test("404 - should respond with error invalid ID", async () => {
+  test("404 - should respond with error invalid ID when passed invalid ID", async () => {
     const invalidMongoID = "invalid_id_format";
     const updateUser = {
       name: "John Doe",
@@ -128,7 +128,7 @@ describe("POST /auth", () => {
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("Invalid id");
   });
-  test("400 - should respond with error bad request", async () => {
+  test("400 - should respond with error when missing post body", async () => {
     const newUser = {
       name: "John Doe",
       email: "john@example.com",
