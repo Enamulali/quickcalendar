@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const {
   handleInternalServerError,
   handleNotFound,
@@ -14,6 +15,11 @@ const { authRouter } = require("./routes/auth");
 const app = express();
 
 //Middleware
+app.use(
+  cors({
+    origin: ["http://localhost:9090", "http://localhost:3000"],
+  })
+);
 app.use(express.json());
 
 //Routes
