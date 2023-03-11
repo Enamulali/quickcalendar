@@ -1,9 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+  Routes,
+} from "react-router-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
-import Login from "./routes/login";
-import Root from "./routes/root";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Login from "./routes/Login";
+import Root from "./routes/Root";
 
 const router = createBrowserRouter([
   {
@@ -16,9 +22,15 @@ const router = createBrowserRouter([
   },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = createRoot(document.getElementById("root"));
+
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <RouterProvider router={router}>
+      <Routes>
+        <Route exact path="/" component={Root} />
+        <Route path="/login" component={Login} />
+      </Routes>
+    </RouterProvider>
   </React.StrictMode>
 );
