@@ -10,3 +10,10 @@ export const loginUser = (input) => {
     return res.data;
   });
 };
+
+export const registerUser = (input) => {
+  return api.post("/auth/", input).then((res) => {
+    console.log(res.data);
+    return res.data;
+  });
+};
