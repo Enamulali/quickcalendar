@@ -8,10 +8,12 @@ const LoginForm = () => {
   const input = { email: inputEmail, password: inputPassword };
   const handleSubmit = (event) => {
     event.preventDefault();
-    loginUser(input).then((user) => {
-      localStorage.setItem("token", user.token);
-      //TO DO - redirect user to dashboard.
-    });
+    loginUser(input)
+      .then((user) => {
+        localStorage.setItem("token", user.token);
+        //TO DO - redirect user to dashboard.
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
