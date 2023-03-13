@@ -9,11 +9,13 @@ const RegisterForm = () => {
   const input = { name: inputName, email: inputEmail, password: inputPassword };
   const handleSubmit = (event) => {
     event.preventDefault();
-    registerUser(input).then((user) => {
-      console.log(user);
+    registerUser(input)
+      .then((user) => {
+        console.log(user);
 
-      //TO DO - Login User and redirect to welcome page
-    }).catch((err) => console.log(err))
+        //TO DO - Login User and redirect to welcome page
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

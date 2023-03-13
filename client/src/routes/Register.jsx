@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import LoginImage from "../components/LoginImage";
 import RegisterForm from "../components/RegisterForm";
+import Image from "../assets/register-image.jpg";
 import "./Login.css";
 
 const Register = () => {
@@ -20,7 +21,7 @@ const Register = () => {
 
   return (
     <div className="login-container">
-      <LoginImage quote={quote} />
+      <LoginImage quote={quote} image={Image} />
       <div className="form-container">
         <RegisterForm />
         <p className="mt-3">

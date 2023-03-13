@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import LoginImage from "../components/LoginImage";
+import Image from "../assets/login-image.jpg";
 import "./Login.css";
 
 const Login = () => {
@@ -22,7 +23,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <LoginImage quote={quote} />
+      <LoginImage quote={quote} image={Image} />
       <div className="form-container">
         <LoginForm />
         <p className="mt-3">

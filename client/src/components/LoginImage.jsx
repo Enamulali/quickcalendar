@@ -1,9 +1,7 @@
-import Image from "../assets/login-image.jpg";
-
-const LoginImage = ({ quote }) => {
+const LoginImage = ({ quote, image }) => {
   return (
     <div className="image-container">
-      <img src={Image} alt="Login" />
+      <img src={image} alt="Login" />
       <h1>{quote}</h1>
     </div>
   );
