@@ -2,8 +2,27 @@ const express = require("express");
 const { Event } = require("../db");
 const { validateId } = require("../middleware/errors");
 const createError = require("http-errors");
+const authJwt = require("../middleware/auth");
 
 const eventsRouter = express.Router();
+
+// Add authorization header to requests
+eventsRouter.use(async (req, res, next) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+      throw createError(401, "Authorization header missing");
+    }
+    const [type, token] = authHeader.split(" ");
+    if (type !== "Bearer" || !token) {
+      throw createError(401, "Invalid authorization header");
+    }
+    req.token = token;
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 eventsRouter.get("/", async (req, res, next) => {
   try {

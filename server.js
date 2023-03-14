@@ -26,12 +26,12 @@ app.use(express.json());
 app.use("/auth", authRouter);
 
 // Protected Routes
-app.use(handleNotFound);
-app.use(authJwt);
-app.use("/users", usersRouter);
-app.use("/events", eventsRouter);
+
+app.use("/users", usersRouter, authJwt);
+app.use("/events", eventsRouter, authJwt);
 
 //Error handling middleware
+app.use(handleNotFound);
 app.use(handleValidationError);
 app.use(handleGenericError);
 app.use(handleInternalServerError);
