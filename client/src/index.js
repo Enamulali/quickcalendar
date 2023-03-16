@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./routes/Login";
 import Root from "./routes/Root";
 import Register from "./routes/Register";
+import Dashboard from "./routes/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
   },
 ]);
 
