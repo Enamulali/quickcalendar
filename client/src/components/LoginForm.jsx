@@ -1,18 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../utils/api";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
   const input = { email: inputEmail, password: inputPassword };
   const handleSubmit = (event) => {
     event.preventDefault();
+    localStorage.clear("token");
     loginUser(input)
       .then((user) => {
         localStorage.setItem("token", user.token);
-        //TO DO - redirect user to dashboard.
       })
+      .then(() => navigate("/dashboard"))
       .catch((err) => console.log(err));
   };
 
