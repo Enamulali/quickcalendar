@@ -11,6 +11,7 @@ const eventsRouter = require("./routes/events");
 const usersRouter = require("./routes/users");
 const authJwt = require("./middleware/auth");
 const { authRouter } = require("./routes/auth");
+const calendarRouter = require("./routes/calendar");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/auth", authRouter);
 
 app.use("/users", usersRouter, authJwt);
 app.use("/events", eventsRouter, authJwt);
+app.use("/calendar", calendarRouter, authJwt);
 
 //Error handling middleware
 app.use(handleNotFound);
