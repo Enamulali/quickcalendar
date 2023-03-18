@@ -13,7 +13,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    process.env.NOTE_ENV === "development" &&
+    process.env.NODE_ENV === "development" &&
       console.log("Connected to database");
 
     mongoose.connection.once("open", async () => {
