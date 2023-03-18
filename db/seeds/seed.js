@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const Event = require("../models/event");
+const Calendar = require("../models/calendar");
 
 async function clearData() {
   try {
@@ -63,6 +64,30 @@ async function seed() {
     console.log(`Created ${createdEvents.length} events`);
   } catch (err) {
     console.error(err);
+  }
+
+  try {
+    const calendars = [
+      {
+        name: "My Calendar",
+        owner: createdUsers[0]._id,
+        events: [createdEvents[0]._id, createdEvents[1]._id],
+      },
+      {
+        name: "Work Calendar",
+        owner: createdUsers[1]._id,
+        events: [createdEvents[2]._id, createdEvents[3]._id],
+      },
+      {
+        name: "Family Calendar",
+        owner: createdUsers[2]._id,
+        events: [createdEvents[4]._id, createdEvents[5]._id],
+      },
+    ];
+    const createdCalendars = await Calendar.create(calendars);
+    console.log(`Created ${createdCalendars.length} calendars`);
+  } catch (err) {
+    next(err);
   }
 }
 
