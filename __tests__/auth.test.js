@@ -5,15 +5,14 @@ const { User } = require("../db");
 const bcrypt = require("bcrypt");
 const { mongoose } = require("mongoose");
 
-beforeAll(async () => {
-  await seed();
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
-});
-
 describe("POST /auth", () => {
+  beforeAll(async () => {
+    await seed();
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
   test("201 - should register a new user", async () => {
     const response = await request(app).post("/auth").send({
       name: "John Doe",
