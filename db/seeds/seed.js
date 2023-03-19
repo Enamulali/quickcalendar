@@ -10,6 +10,9 @@ async function clearData() {
 
     await Event.deleteMany({});
     console.log("Deleted all events");
+
+    await Calendar.deleteMany({});
+    console.log("Deleted all calendars");
   } catch (err) {
     console.log(err);
   }
@@ -39,6 +42,8 @@ async function seed() {
     },
   ];
 
+  let createdUsers, createdEvents;
+
   // Hash passwords for users
   const saltRounds = 10;
   const hashedUsers = await Promise.all(
@@ -50,10 +55,10 @@ async function seed() {
 
   // Create users and events
   try {
-    const createdUsers = await User.create(hashedUsers);
+    createdUsers = await User.create(hashedUsers);
     console.log(`Created ${createdUsers.length} users`);
 
-    const createdEvents = await Event.create([
+    createdEvents = await Event.create([
       { ...events[0], owner: createdUsers[0]._id },
       { ...events[1], owner: createdUsers[0]._id },
       { ...events[0], owner: createdUsers[1]._id },
@@ -87,7 +92,7 @@ async function seed() {
     const createdCalendars = await Calendar.create(calendars);
     console.log(`Created ${createdCalendars.length} calendars`);
   } catch (err) {
-    next(err);
+    console.error(err);
   }
 }
 
