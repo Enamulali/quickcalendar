@@ -2,7 +2,7 @@ const express = require("express");
 const { Event } = require("../db");
 const { validateId } = require("../middleware/errors");
 const createError = require("http-errors");
-const authJwt = require("../middleware/auth");
+const jwt = require("jsonwebtoken");
 
 const eventsRouter = express.Router();
 
@@ -17,7 +17,8 @@ eventsRouter.use(async (req, res, next) => {
     if (type !== "Bearer" || !token) {
       throw createError(401, "Invalid authorization header");
     }
-    req.token = token;
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decodedToken.userId;
     next();
   } catch (err) {
     next(err);
@@ -26,7 +27,7 @@ eventsRouter.use(async (req, res, next) => {
 
 eventsRouter.get("/", async (req, res, next) => {
   try {
-    const events = await Event.find();
+    const events = await Event.find({ owner: req.userId });
 
     if (events.length === 0) {
       throw createError(404, "No events found");
@@ -53,6 +54,10 @@ eventsRouter.get("/:id", validateId, async (req, res, next) => {
 
     if (!event) throw createError(404, "Event not found");
 
+    if (event.owner !== req.userId) {
+      throw createError(401, "Unauthorized - you can only get your own events");
+    }
+
     res.status(200).send(event);
   } catch (err) {
     next(err);
@@ -72,6 +77,13 @@ eventsRouter.put("/:id", validateId, async (req, res, next) => {
 
     if (!updatedEvent) throw createError(404, "Event not found");
 
+    if (updatedEvent.owner !== req.userId) {
+      throw createError(
+        401,
+        "Unauthorized - you can only update your own events"
+      );
+    }
+
     res.status(201).send(updatedEvent);
   } catch (err) {
     next(err);
@@ -84,6 +96,13 @@ eventsRouter.delete("/:id", validateId, async (req, res, next) => {
     const deletedEvent = await Event.findByIdAndDelete(id);
 
     if (!deletedEvent) throw createError(404, "Event not found");
+
+    if (deletedEvent.owner !== req.userId) {
+      throw createError(
+        401,
+        "Unauthorized - you can only delete your own events"
+      );
+    }
 
     res.status(204).send();
   } catch (err) {
