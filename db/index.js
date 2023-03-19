@@ -10,10 +10,12 @@ const inquirer = require("inquirer");
 
 async function main() {
   try {
+    mongoose.set("strictQuery", false);
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+
     console.log("Connected to database");
 
     let answer = "y";

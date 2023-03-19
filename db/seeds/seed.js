@@ -59,12 +59,42 @@ async function seed() {
     console.log(`Created ${createdUsers.length} users`);
 
     createdEvents = await Event.create([
-      { ...events[0], owner: createdUsers[0]._id },
-      { ...events[1], owner: createdUsers[0]._id },
-      { ...events[0], owner: createdUsers[1]._id },
-      { ...events[1], owner: createdUsers[1]._id },
-      { ...events[0], owner: createdUsers[2]._id },
-      { ...events[1], owner: createdUsers[2]._id },
+      {
+        ...events[0],
+        title: "Event 1",
+        description: "Description of Event 1",
+        owner: createdUsers[0]._id,
+      },
+      {
+        ...events[1],
+        title: "Event 2",
+        description: "Description of Event 2",
+        owner: createdUsers[0]._id,
+      },
+      {
+        ...events[0],
+        title: "Event 1",
+        description: "Description of Event 1",
+        owner: createdUsers[1]._id,
+      },
+      {
+        ...events[1],
+        title: "Event 2",
+        description: "Description of Event 2",
+        owner: createdUsers[1]._id,
+      },
+      {
+        ...events[0],
+        title: "Event 1",
+        description: "Description of Event 1",
+        owner: createdUsers[2]._id,
+      },
+      {
+        ...events[1],
+        title: "Event 2",
+        description: "Description of Event 2",
+        owner: createdUsers[2]._id,
+      },
     ]);
     console.log(`Created ${createdEvents.length} events`);
   } catch (err) {
