@@ -13,12 +13,17 @@ const Dashboard = ({ events }) => {
 
   return (
     <Container fluid>
-      <Row>
+      <Row className="mt-4">
         <Col>
+          <h1>Welcome to your calendar</h1>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col className="d-flex justify-content-center">
           <SliderToggle onChange={handleViewChange} setView={setView} />
         </Col>
       </Row>
-      <Row>
+      <Row className="mt-4">
         <Col>
           {view === "list" ? (
             <ListEvents events={events} />

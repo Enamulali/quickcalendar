@@ -1,11 +1,26 @@
-#custom-switch .custom-control-label {
+.slider {
+  display: flex;
+  height: 40px;
+  width: 200px;
+  border-radius: 15px;
+  background-color: #c2c2c2;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.slider-option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 50%;
+  font-size: 12px;
   color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s;
 }
 
-#custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+.slider-option.active {
   background-color: #007bff;
-}
-
-#custom-switch .custom-control-input:checked ~ .custom-control-label::after {
-  background-color: white;
 }

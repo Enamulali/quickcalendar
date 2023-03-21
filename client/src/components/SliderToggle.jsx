@@ -1,25 +1,30 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
 import "./SliderToggle.css";
 
-const SliderToggle = ({ onChange, setView }) => {
+const SliderToggle = ({ onChange }) => {
   const [checked, setChecked] = useState(false);
 
   const handleChange = () => {
     const newChecked = !checked;
     setChecked(newChecked);
     onChange(newChecked);
-    setView(newChecked ? "calendar" : "list");
   };
 
   return (
-    <Form.Check
-      type="switch"
-      id="custom-switch"
-      label="List View"
-      checked={checked}
-      onChange={handleChange}
-    />
+    <div className="slider">
+      <div
+        className={`slider-option ${!checked ? "active" : ""}`}
+        onClick={() => handleChange()}
+      >
+        List
+      </div>
+      <div
+        className={`slider-option ${checked ? "active" : ""}`}
+        onClick={() => handleChange()}
+      >
+        Calendar
+      </div>
+    </div>
   );
 };
 
