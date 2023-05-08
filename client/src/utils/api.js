@@ -28,7 +28,6 @@ export const registerUser = (input) => {
 
 export const getAllEvents = () => {
   return api.get("/events").then((res) => {
-    console.log(res.data);
     return res.data;
   });
 };
